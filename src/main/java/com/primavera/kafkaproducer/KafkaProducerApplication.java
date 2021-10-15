@@ -7,15 +7,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
-import com.primavera.kafkaadapter.KafkaProducerConfig;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.kafka.core.KafkaTemplate;
 
 @SpringBootApplication
-@ComponentScan("com.primavera.kafkaadapter")
 public class KafkaProducerApplication implements CommandLineRunner {
 
 	@Autowired
-	private KafkaProducerConfig kafkaProducerConfig;
+	private KafkaTemplate<String,String> kafkaTemplate;
 
 	@Value("${billing.kafka.output.topic}")
 	private String topicName;
@@ -28,10 +26,12 @@ public class KafkaProducerApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Scanner scanner = new Scanner(System.in);
 		while (true) {
-			System.out.print("Enter your Kafka Message ");
-			String msg = scanner.next();
-			System.out.println("producing message: " + msg + "for topic:" +topicName);
-			kafkaProducerConfig.kafkaTemplate().send(topicName, msg);
+			System.out.print("Enter your Kafka Message Key: ");
+			String key = scanner.next();
+			System.out.print("Enter your Kafka Message Value: ");
+			String value = scanner.next();
+			System.out.println("producing message for topic:" + topicName);
+			kafkaTemplate.send(topicName,key, value);
 		}
 
 	}
