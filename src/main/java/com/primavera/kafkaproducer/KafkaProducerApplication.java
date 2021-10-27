@@ -7,23 +7,24 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
+
 import org.springframework.kafka.core.KafkaTemplate;
 
 @SpringBootApplication
 public class KafkaProducerApplication implements CommandLineRunner {
 
-	@Autowired
-	private KafkaTemplate<String,String> kafkaTemplate;
+    @Autowired
+    private KafkaTemplate<String, Object> kafkaTemplate;
 
-	@Value("${billing.kafka.output.topic}")
-	private String topicName;
+    @Value("${billing.kafka.output.topic}")
+    private String topicName;
 
-	public static void main(String[] args) {
-		SpringApplication.run(KafkaProducerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(KafkaProducerApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
+    @Override
+/*	public void run(String... args) throws Exception {
 		Scanner scanner = new Scanner(System.in);
 		while (true) {
 			System.out.print("Enter your Kafka Message Key: ");
@@ -34,6 +35,10 @@ public class KafkaProducerApplication implements CommandLineRunner {
 			kafkaTemplate.send(topicName,key, value);
 		}
 
-	}
+	}*/
+    public void run(String... args) throws Exception {
+        Person person = new Person("oytun", 43);
+        kafkaTemplate.send(topicName, "key", person);
+    }
 
 }
